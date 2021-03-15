@@ -1,3 +1,4 @@
+require 'active_support/core_ext/object'
 require 'json_representations/collection.rb'
 
 module JsonRepresentations
@@ -48,7 +49,7 @@ module JsonRepresentations
             find_representation(representation[:extend])
           end
 
-        return data unless representation
+        return data.as_json unless representation
       end
     end
   end

@@ -65,7 +65,7 @@ RSpec.describe 'Representation' do
     end
 
     context 'when use simple representation' do
-      let(:result) { {full_name: 'John Doe', date: nil} }
+      let(:result) { {'full_name' => 'John Doe', 'date' => nil} }
 
       it 'renders correctly with representation as symbol' do
         expect(@user.representation(:public)).to eq(result)
@@ -81,7 +81,7 @@ RSpec.describe 'Representation' do
     end
 
     context 'when pass options' do
-      let(:result) { {full_name: 'John Doe', date: '2017-12-21'} }
+      let(:result) { {'full_name' => 'John Doe', 'date' => '2017-12-21'} }
 
       it 'renders correctly' do
         expect(@user.representation(:public, date: '2017-12-21')).to eq(result)
@@ -89,7 +89,7 @@ RSpec.describe 'Representation' do
     end
 
     context 'when use representation with relations' do
-      let(:result) { {city: {name: 'Madrid'}} }
+      let(:result) { {'city' => {'name' => 'Madrid'}} }
 
       it 'renders correctly' do
         expect(@user.representation(:city)).to eq(result)
@@ -97,7 +97,7 @@ RSpec.describe 'Representation' do
     end
 
     context 'when use representation with extend' do
-      let(:result) { {full_name: 'John Doe', date: nil, age: 30} }
+      let(:result) { {'full_name' => 'John Doe', 'date' => nil, 'age' => 30} }
 
       it 'renders correctly' do
         expect(@user.representation(:private)).to eq(result)
@@ -105,7 +105,7 @@ RSpec.describe 'Representation' do
     end
 
     context 'when use representation with an array' do
-      let(:result) { {full_name: 'John Doe', date: nil} }
+      let(:result) { {'full_name' => 'John Doe', 'date' => nil} }
 
       it 'renders correctly representations' do
         query = [@user]
@@ -188,17 +188,17 @@ RSpec.describe 'Representation' do
     it 'renders representation' do
       # first level
       parent = Parent.new('parent')
-      expect(parent.representation(:a)).to eq(name: 'parent') # overwritten
+      expect(parent.representation(:a)).to eq('name' => 'parent') # overwritten
 
       # second level
       child = Child.new('child', 'red')
-      expect(child.representation(:a)).to eq(color: 'red') # overwritten
-      expect(child.representation(:b)).to eq(name: 'child', color: 'red') # extended
-      expect(child.representation(:c)).to eq(name: 'child') # parent
+      expect(child.representation(:a)).to eq('color' => 'red') # overwritten
+      expect(child.representation(:b)).to eq('name' => 'child', 'color' => 'red') # extended
+      expect(child.representation(:c)).to eq('name' => 'child') # parent
 
       # third level
       gchild = GrandChild.new('gchild', 'blue')
-      expect(gchild.representation(:b)).to eq(name: 'gchild', color: 'blue', aux: true)
+      expect(gchild.representation(:b)).to eq('name' => 'gchild', 'color' => 'blue', 'aux' => true)
     end
   end
 
