@@ -24,7 +24,7 @@ RSpec.describe 'Representation' do
 
         representation :city do
           {
-            city: city.as_json(representation: :basic)
+            city: city.representation(:basic)
           }
         end
 
@@ -68,11 +68,11 @@ RSpec.describe 'Representation' do
       let(:result) { {full_name: 'John Doe', date: nil} }
 
       it 'renders correctly with representation as symbol' do
-        expect(@user.as_json(representation: :public)).to eq(result)
+        expect(@user.representation(:public)).to eq(result)
       end
 
       it 'renders correctly with representation as string' do
-        expect(@user.as_json(representation: 'public')).to eq(result)
+        expect(@user.representation('public')).to eq(result)
       end
 
       it 'renders correctly when use :repersentation alias' do
@@ -84,7 +84,7 @@ RSpec.describe 'Representation' do
       let(:result) { {full_name: 'John Doe', date: '2017-12-21'} }
 
       it 'renders correctly' do
-        expect(@user.as_json(representation: :public, date: '2017-12-21')).to eq(result)
+        expect(@user.representation(:public, date: '2017-12-21')).to eq(result)
       end
     end
 
@@ -92,7 +92,7 @@ RSpec.describe 'Representation' do
       let(:result) { {city: {name: 'Madrid'}} }
 
       it 'renders correctly' do
-        expect(@user.as_json(representation: :city)).to eq(result)
+        expect(@user.representation(:city)).to eq(result)
       end
     end
 
@@ -100,7 +100,7 @@ RSpec.describe 'Representation' do
       let(:result) { {full_name: 'John Doe', date: nil, age: 30} }
 
       it 'renders correctly' do
-        expect(@user.as_json(representation: :private)).to eq(result)
+        expect(@user.representation(:private)).to eq(result)
       end
     end
 
@@ -110,49 +110,6 @@ RSpec.describe 'Representation' do
       it 'renders correctly representations' do
         query = [@user]
         expect(query.representation(:public)).to eq([result])
-      end
-    end
-  end
-
-  context 'when use into class with has as_json method' do
-    before :all do
-      module AsJsonDefault
-        def as_json(options=nil)
-          {dog_name: name, color: options[:color]}
-        end
-      end
-
-      class Dog
-        include AsJsonDefault
-        include JsonRepresentations
-
-        attr_accessor :name
-
-        def initialize(name)
-          @name = name
-        end
-
-        representation :basic do
-          {name: name}
-        end
-      end
-    end
-
-    after :all do
-      [AsJsonDefault, Dog].each { |x| Object.send(:remove_const, x.to_s) }
-    end
-
-    context 'when use representation option' do
-      it 'renders representation' do
-        dog = Dog.new('bob')
-        expect(dog.as_json(representation: :basic)).to eq(name: 'bob')
-      end
-    end
-
-    context 'when do not use representation option' do
-      it 'calls super method' do
-        dog = Dog.new('bob')
-        expect(dog.as_json(color: 'dark')).to eq(dog_name: 'bob', color: 'dark')
       end
     end
   end
@@ -231,24 +188,24 @@ RSpec.describe 'Representation' do
     it 'renders representation' do
       # first level
       parent = Parent.new('parent')
-      expect(parent.as_json(representation: :a)).to eq(name: 'parent') # overwritten
+      expect(parent.representation(:a)).to eq(name: 'parent') # overwritten
 
       # second level
       child = Child.new('child', 'red')
-      expect(child.as_json(representation: :a)).to eq(color: 'red') # overwritten
-      expect(child.as_json(representation: :b)).to eq(name: 'child', color: 'red') # extended
-      expect(child.as_json(representation: :c)).to eq(name: 'child') # parent
+      expect(child.representation(:a)).to eq(color: 'red') # overwritten
+      expect(child.representation(:b)).to eq(name: 'child', color: 'red') # extended
+      expect(child.representation(:c)).to eq(name: 'child') # parent
 
       # third level
       gchild = GrandChild.new('gchild', 'blue')
-      expect(gchild.as_json(representation: :b)).to eq(name: 'gchild', color: 'blue', aux: true)
+      expect(gchild.representation(:b)).to eq(name: 'gchild', color: 'blue', aux: true)
     end
   end
 
   context 'when check collection' do
     context 'when query has not klass method' do
       it 'returns super' do
-        expect([].as_json).to eq([])
+        expect([].representation).to eq([])
       end
     end
 
@@ -258,7 +215,7 @@ RSpec.describe 'Representation' do
 
         allow(query).to receive(:includes).and_return(query)
         allow(query).to receive(:klass).and_return(query)
-        expect(query.as_json).to eq([])
+        expect(query.representation).to eq([])
       end
     end
   end

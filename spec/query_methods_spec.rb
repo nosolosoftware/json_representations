@@ -32,7 +32,7 @@ RSpec.describe 'QueryMethods' do
           allow(query).to receive(query_method).and_return(query)
           allow(query).to receive(:klass).and_return(query.first.class)
           expect(query).to receive(query_method).with([:one])
-          query.as_json(representation: :a)
+          query.representation(:a)
         end
 
         it "works when #{query_method} returns new query (ActiveRecord::Relation)" do
@@ -42,7 +42,7 @@ RSpec.describe 'QueryMethods' do
           allow(query).to receive(:klass).and_return(query.first.class)
           expect(query).to receive(query_method).with([:one])
           expect(query_method_query).to receive(:map).and_call_original
-          query.as_json(representation: :a)
+          query.representation(:a)
         end
       end
 
@@ -71,7 +71,7 @@ RSpec.describe 'QueryMethods' do
           allow(query).to receive(query_method).and_return(query)
           allow(query).to receive(:klass).and_return(query.first.class)
           expect(query).to receive(query_method).with(%i[one two])
-          query.as_json(representation: :b)
+          query.representation(:b)
         end
       end
 
@@ -107,7 +107,7 @@ RSpec.describe 'QueryMethods' do
           allow(query).to receive(query_method).and_return(query)
           allow(query).to receive(:klass).and_return(query.first.class)
           expect(query).to receive(query_method).with(%i[one two])
-          query.as_json(representation: :a)
+          query.representation(:a)
         end
       end
     end

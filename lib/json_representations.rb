@@ -31,8 +31,7 @@ module JsonRepresentations
       representations[name] || @parent_entity&.find_representation(name) if name
     end
 
-    def render_representation(object, options)
-      representation_name = options.delete(:representation)&.to_sym
+    def render_representation(object, representation_name, options)
       return {} unless (representation = find_representation(representation_name))
 
       data = {}
@@ -59,18 +58,10 @@ module JsonRepresentations
 
     base.class_eval do
       eval %{
-        def as_json(options={})
-          if !options[:representation] && defined?(super)
-            super(options)
-          else
-            #{base}.render_representation(self, options.dup)
-          end
+        def representation(name, options={})
+          #{base}.render_representation(self, name.to_sym, options.dup)
         end
       }
-
-      def representation(name, options={})
-        as_json(options.merge(representation: name))
-      end
 
       def self.included(base)
         if base.class == Module
