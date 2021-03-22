@@ -1,6 +1,6 @@
 # JsonRepresentations
 [![Gem Version](https://badge.fury.io/rb/json_representations.svg)](https://badge.fury.io/rb/json_representations)
-![Build Status](https://travis-ci.org/nosolosoftware/json_representations.svg?branch=master)
+![Build Status](https://github.com/nosolosoftware/json_representations/actions/workflows/rspec.yml/badge.svg)
 
 Creates representations of your model data in a simple and clean way.
 
@@ -13,8 +13,6 @@ Creates representations of your model data in a simple and clean way.
 * Support options
 * Support ActiveRecord collection options
 * Faster
-
-The performance of this gem is up to **7x higher** than other for a simple class instance serialization: [test](https://github.com/rjurado01/as_json_representations_benchmarks)
 
 ## Installation
 
